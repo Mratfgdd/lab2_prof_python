@@ -1,0 +1,613 @@
+<!doctype html><html lang='uk'><head><meta charset='utf-8'><title>Звіт ЛР2</title><style>
+@page { size: A4; margin: 20mm 15mm 20mm 30mm;
+  @bottom-center { content: counter(page); font: 12pt "Times New Roman", serif; } }
+@page :first { @bottom-center { content: none; } }
+html { background: #fff; }
+body { margin: 0; color: #000; background: #fff; font-family: "Times New Roman", serif;
+  font-size: 14pt; line-height: 1.2; }
+p { margin: 0 0 2pt; text-indent: 1.25cm; text-align: justify; }
+h1 { font-size: 14pt; text-align: center; margin: 12pt 0 6pt; break-after: avoid; }
+h2 { font-size: 14pt; margin: 8pt 0 3pt; text-indent: 1.25cm; break-after: avoid; }
+ul { margin: 0 0 4pt 1.25cm; padding-left: 0.6cm; }
+li { text-align: justify; }
+code { font-family: Consolas, "Courier New", monospace; font-size: 0.82em; }
+pre.code, pre.out { font-family: Consolas, "Courier New", monospace; font-size: 9pt;
+  line-height: 1.15; margin: 3pt 0 6pt; padding: 4pt 8pt; white-space: pre-wrap;
+  background: #f6f6f4; border-left: 3px solid #c3c2b7; orphans: 4; widows: 4; }
+pre.keep { break-inside: avoid; }
+pre.out { font-size: 8.6pt; background: #fbfbfa; border: 1px solid #c3c2b7; }
+pre.tree { font-size: 10pt; break-inside: avoid; }
+table { width: 100%; border-collapse: collapse; font-size: 11pt; line-height: 1.15;
+  margin: 2pt 0 8pt; break-inside: auto; }
+th, td { border: 1px solid #000; padding: 2pt 5pt; vertical-align: top; text-align: left; }
+th { background: #f0efec; font-weight: bold; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+table.num td { text-align: right; white-space: nowrap; }
+table.num td:first-child { text-align: left; }
+tr { break-inside: avoid; }
+.tcap { text-indent: 0; text-align: left; margin: 6pt 0 2pt; break-after: avoid; }
+.fcap { text-indent: 0; text-align: center; margin: 2pt 0 8pt; }
+.figure { text-align: center; break-inside: avoid; margin-top: 4pt; }
+.figure svg { width: 100%; height: auto; }
+.title { height: 255mm; display: flex; flex-direction: column; justify-content: space-between;
+  text-align: center; break-after: page; line-height: 1.5; }
+.title .head { font-size: 14pt; }
+.title .main { margin-top: 30mm; }
+.title .main .big { font-size: 20pt; font-weight: bold; letter-spacing: 2pt; }
+.title .main .theme { font-size: 16pt; font-weight: bold; margin-top: 10pt; }
+.title .sign { align-self: flex-end; text-align: left; width: 85mm; margin-top: 30mm; }
+.title .city { margin-top: auto; }
+</style></head><body>
+<section class="title">
+  <div class="head">МІНІСТЕРСТВО ОСВІТИ І НАУКИ УКРАЇНИ<br>
+  Львівський національний університет імені Івана Франка</div>
+  <div class="main">
+    <div class="big">ЗВІТ</div>
+    <div>до лабораторної роботи №2</div>
+    <div>з дисципліни «Професійний Python»</div>
+    <div class="theme">Тема: «Структури даних та функціональна декомпозиція»</div>
+  </div>
+  <div class="sign">Виконав:<br>студент Левандівський Назар<br><br>
+  Перевірив:<br>Куньо Іван Михайлович</div>
+  <div class="city">Львів – 2026</div>
+</section>
+<h1>Мета роботи</h1>
+<p>Сформувати практичні навички використання базових і розширених структур даних Python (list, tuple, set, dict, модуль collections), навчитися обирати структуру відповідно до задачі, оцінювати складність основних операцій та декомпозувати програму на невеликі функції з чіткою відповідальністю, використовуючи *args, **kwargs, lambda, closures і decorators.</p>
+<h1>1. Постановка задачі</h1>
+<p><b>Варіант 1. Аналіз успішності студентів</b> (узгоджено з ЛР1 «Система обліку студентів»). Вхідні дані – набір студентів з полями: ім'я, прізвище, група, середній бал. Потрібно створити модуль обробки структурованих даних, який реалізує операції з таблиці 1, використовує всі основні структури даних, comprehensions, функції вищого порядку, closure і decorator, а також містить аналіз складності та benchmark пошуку.</p>
+<p class="tcap">Таблиця 1 – Вимоги варіанта 1 та їх реалізація (результат на демонстраційних даних)</p>
+<table class=""><thead><tr><th>Вимога</th><th>Функція</th><th>Результат</th></tr></thead><tbody><tr><td>пошук студента за ID</td><td><code>find_student</code></td><td>3 → Ірина Бондар</td></tr><tr><td>пошук за прізвищем (без урахування регістру)</td><td><code>find_by_last_name</code></td><td>«Мельник» → Олег Мельник, Максим Мельник</td></tr><tr><td>групування за групою</td><td><code>group_students</code></td><td>PI-21 – 4, PI-22 – 3, PI-23 – 3</td></tr><tr><td>середній бал усіх студентів</td><td><code>calculate_average</code></td><td>80.05</td></tr><tr><td>найкращий студент</td><td><code>find_best_student</code></td><td>Ірина Бондар, 95.20</td></tr><tr><td>фільтрація за мін. балом (85)</td><td><code>filter_by_min_grade</code></td><td>ID 1, 3, 4, 9</td></tr><tr><td>сортування за середнім балом</td><td><code>sort_by_grade</code></td><td>ID 3, 9, 1 …</td></tr><tr><td>dict-index за ID студента</td><td><code>create_student_index</code></td><td>10 ключів</td></tr></tbody></table>
+<h1>2. Опис структури даних</h1>
+<p>Один студент – це словник (dict) з п'ятьма полями (таблиця 2). Такий формат відповідає JSON-like даним, легко серіалізується і дозволяє звертатися до полів за ключем. Набір студентів зберігається у списку (list) <code>students</code> – це впорядкована колекція, яку можна фільтрувати, сортувати й групувати. Демонстраційні дані задано таблицею кортежів <code>STUDENT_ROWS</code>, з якої списком comprehension через <code>create_student</code> будуються записи; для великих наборів функція <code>generate_students(count, seed)</code> генерує відтворювані випадкові дані. Демонстраційний набір містить 10 студентів у 3 групах, 9 унікальних прізвищ (прізвище «Мельник» трапляється двічі, тому пошук за прізвищем повертає список).</p>
+<p class="tcap">Таблиця 2 – Поля запису студента</p>
+<table class=""><thead><tr><th>Ключ</th><th>Тип</th><th>Приклад</th><th>Зміст</th></tr></thead><tbody><tr><td><code>id</code></td><td>int</td><td>3</td><td>ідентифікатор студента (унікальний ключ індексу)</td></tr><tr><td><code>first_name</code></td><td>str</td><td>"Ірина"</td><td>ім'я</td></tr><tr><td><code>last_name</code></td><td>str</td><td>"Бондар"</td><td>прізвище</td></tr><tr><td><code>group</code></td><td>str</td><td>"PI-22"</td><td>група (не порожня)</td></tr><tr><td><code>average_grade</code></td><td>float</td><td>95.2</td><td>середній бал, 0–100</td></tr></tbody></table>
+<h1>3. Вибір структур даних</h1>
+<p class="tcap">Таблиця 3 – Використані структури даних і причини вибору</p>
+<table class=""><thead><tr><th>Структура</th><th>Де використано</th><th>Чому саме вона</th></tr></thead><tbody><tr><td>list</td><td><code>students</code>, результати фільтрації та сортування</td><td>впорядкований змінюваний набір; підтримує сортування і зріз</td></tr><tr><td>tuple</td><td><code>STUDENT_ROWS</code>, <code>GRADE_LEVELS</code>, <code>GROUPS</code>, ключ сортування у <code>sort_items</code>, <code>GradeStats</code> (NamedTuple)</td><td>незмінні групи значень; порівнюються лексикографічно; hashable</td></tr><tr><td>set / frozenset</td><td><code>get_unique_values</code>, фільтр груп у closure, <code>options.keys() - SUMMARY_DEFAULTS.keys()</code></td><td>унікальність і перевірка <code>in</code> за O(1); операції над множинами</td></tr><tr><td>dict</td><td>запис студента, dict-індекс за ID, <code>LEVEL_LABELS</code>, підсумок</td><td>доступ за ключем O(1); природне представлення запису</td></tr><tr><td>defaultdict(list)</td><td><code>group_students</code>, <code>group_nested</code></td><td>групування без перевірки, чи існує ключ</td></tr><tr><td>Counter</td><td><code>count_students_by_group</code>, <code>operation_counts</code></td><td>підрахунок частот, <code>most_common()</code></td></tr><tr><td>deque(maxlen=5)</td><td><code>operation_history</code></td><td>журнал останніх операцій: append O(1), старі записи відкидаються</td></tr></tbody></table>
+<p>Приклад використання collections – групування з defaultdict і підрахунок з Counter:</p>
+<pre class="code keep">@track_operation("групування за групою")
+def group_students(students: list[Student]) -&gt; dict[str, list[Student]]:
+    groups: defaultdict[str, list[Student]] = defaultdict(list)
+    for student in students:
+        groups[student["group"]].append(student)
+    return dict(groups)
+
+def count_students_by_group(students: list[Student]) -&gt; Counter[str]:
+    return Counter(student["group"] for student in students)</pre>
+<h1>4. Структура проєкту</h1>
+<p>Проєкт має src-layout, як у ЛР1, і встановлюється командою <code>python -m pip install -e .</code>; точки входу – <code>python -m data_processor.main</code> і <code>python -m data_processor.benchmark</code> (або console commands <code>student-report</code>, <code>student-benchmark</code>).</p>
+<pre class="code keep tree">Lab_02/
+├── pyproject.toml
+├── README.md
+├── .gitignore
+├── src/
+│   └── data_processor/
+│       ├── __init__.py
+│       ├── analytics.py
+│       ├── benchmark.py
+│       ├── data.py
+│       ├── decorators.py
+│       ├── main.py
+│       └── processors.py
+├── tests/
+│   ├── test_analytics.py
+│   └── test_processors.py
+├── results/        summary.json, benchmark.csv
+└── report/         build_report.py (генератор цього звіту)</pre>
+<p class="tcap">Таблиця 4 – Призначення модулів</p>
+<table class=""><thead><tr><th>Модуль</th><th>Відповідальність</th></tr></thead><tbody><tr><td><code>data.py</code></td><td>вхідні дані, константи, <code>create_student</code>, <code>generate_students</code></td></tr><tr><td><code>decorators.py</code></td><td><code>measure_time</code>, параметризований <code>track_operation</code>, журнал deque і Counter</td></tr><tr><td><code>processors.py</code></td><td>індекс, пошук, фільтри (closures), групування, сортування, pipeline</td></tr><tr><td><code>analytics.py</code></td><td>середнє, найкращий студент, статистика, підсумок, експорт у JSON</td></tr><tr><td><code>benchmark.py</code></td><td>експериментальна частина: list vs dict/set</td></tr><tr><td><code>main.py</code></td><td>точка входу: демонстрація всіх операцій</td></tr></tbody></table>
+<h1>5. Основні функції</h1>
+<p>Програму розбито на 44 функції верхнього рівня у 7 модулях; кожна виконує одну логічну задачу (таблиця 5).</p>
+<p class="tcap">Таблиця 5 – Основні функції модуля</p>
+<table class=""><thead><tr><th>Функція</th><th>Призначення</th><th>Прийом</th></tr></thead><tbody><tr><td><code>create_student_index(students)</code></td><td>dict-індекс за ID</td><td>dict comprehension</td></tr><tr><td><code>find_student(index, student_id)</code></td><td>пошук за ID</td><td>dict.get, декоратор</td></tr><tr><td><code>find_by_last_name(students, last_name)</code></td><td>пошук за прізвищем</td><td>list comprehension, casefold</td></tr><tr><td><code>filter_items(items, predicate)</code></td><td>універсальний фільтр</td><td>функція вищого порядку</td></tr><tr><td><code>create_grade_filter(minimum)</code></td><td>фільтр за мін. балом</td><td>closure</td></tr><tr><td><code>create_group_filter(*groups)</code></td><td>фільтр за групами</td><td>closure, *args</td></tr><tr><td><code>group_students</code>, <code>group_nested</code></td><td>групування, вкладене групування</td><td>defaultdict, рекурсія</td></tr><tr><td><code>sort_by_grade</code>, <code>sort_items</code></td><td>сортування за балом / за кількома полями</td><td>lambda, tuple-ключ</td></tr><tr><td><code>calculate_average</code></td><td>середній бал</td><td>generator expression, декоратор</td></tr><tr><td><code>calculate_stats(*grades)</code></td><td>статистика значень</td><td>*args, NamedTuple</td></tr><tr><td><code>build_summary(students, **options)</code></td><td>підсумковий звіт</td><td>**kwargs</td></tr><tr><td><code>run_pipeline(items, *steps)</code></td><td>послідовна обробка</td><td>reduce + lambda</td></tr></tbody></table>
+<h1>6. Приклади ключових конструкцій</h1>
+<h2>6.1. Comprehensions і generator expression</h2>
+<p>Set comprehension збирає унікальні значення поля, dict comprehension будує індекс, list comprehension фільтрує, а generator expression рахує суму без проміжного списку:</p>
+<pre class="code">def get_unique_values(students: list[Student], field: str) -&gt; set[Any]:
+    return {student[field] for student in students}
+
+def create_student_index(students: list[Student]) -&gt; dict[int, Student]:
+    index = {student["id"]: student for student in students}
+    if len(index) != len(students):
+        raise ValueError("Ідентифікатори студентів повторюються")
+    return index
+
+def filter_items(items: list[Student], predicate: Predicate) -&gt; list[Student]:
+    return [item for item in items if predicate(item)]
+
+@measure_time
+def calculate_average(students: list[Student]) -&gt; float:
+    if not students:
+        return 0.0
+    return round(sum(student["average_grade"] for student in students) / len(students), 2)</pre>
+<h2>6.2. *args</h2>
+<p>Функція <code>calculate_stats</code> приймає довільну кількість значень; при виклику генератор розпаковується оператором <code>*</code>: <code>calculate_stats(*(s["average_grade"] for s in students))</code>.</p>
+<pre class="code keep">def calculate_stats(*grades: float) -&gt; GradeStats:
+    if not grades:
+        return GradeStats(0, 0.0, 0.0, 0.0)
+    return GradeStats(
+        size=len(grades),
+        average=round(sum(grades) / len(grades), 2),
+        minimum=min(grades),
+        maximum=max(grades),
+    )</pre>
+<h2>6.3. **kwargs</h2>
+<p><code>create_student(**fields)</code> формує запис з іменованих аргументів і перевіряє його: усі поля на місці, група не порожня, середній бал у межах 0–100. <code>build_summary(students, **options)</code> приймає налаштування <code>top</code> і <code>min_grade</code>; невідомі ключі знаходяться різницею множин ключів і дають <code>TypeError</code>.</p>
+<pre class="code keep">def create_student(**fields: Any) -&gt; Student:
+    missing = [name for name in REQUIRED_FIELDS if name not in fields]
+    if missing:
+        raise ValueError(f"Відсутні поля: {', '.join(missing)}")
+    if not str(fields["group"]).strip():
+        raise ValueError("Група не може бути порожньою")
+    if not 0 &lt;= fields["average_grade"] &lt;= 100:
+        raise ValueError("Середній бал має бути в межах 0-100")
+    return dict(fields)</pre>
+<h2>6.4. lambda</h2>
+<p>lambda використано як короткий ключ сортування та пошуку максимуму. У <code>sort_items</code> ключ – це tuple значень кількох полів, тому студенти впорядковуються спершу за групою, потім за середнім балом.</p>
+<pre class="code keep">@track_operation("сортування за балом")
+def sort_by_grade(students: list[Student], reverse: bool = True) -&gt; list[Student]:
+    return sorted(students, key=lambda student: student["average_grade"], reverse=reverse)
+
+def sort_items(items: list[Student], *fields: str, reverse: bool = False) -&gt; list[Student]:
+    if not fields:
+        raise ValueError("Потрібно вказати хоча б одне поле для сортування")
+    return sorted(
+        items,
+        key=lambda item: tuple(item[field] for field in fields),
+        reverse=reverse,
+    )</pre>
+<h2>6.5. Closure</h2>
+<p><code>create_grade_filter</code> повертає внутрішню функцію <code>predicate</code>, яка пам'ятає <code>minimum</code> після завершення зовнішньої функції (значення зберігається в <code>predicate.__closure__</code>, що перевіряє тест). Так само <code>create_group_filter(*groups)</code> замикає frozenset допустимих груп.</p>
+<pre class="code keep">def create_grade_filter(minimum: float) -&gt; Predicate:
+    def predicate(student: Student) -&gt; bool:
+        return student["average_grade"] &gt;= minimum
+
+    return predicate
+
+def create_group_filter(*groups: str) -&gt; Predicate:
+    allowed = frozenset(groups)
+
+    def predicate(student: Student) -&gt; bool:
+        return student["group"] in allowed
+
+    return predicate</pre>
+<h2>6.6. Decorators</h2>
+<p><code>measure_time</code> виводить час виконання функції, не змінюючи її коду (застосовано до <code>calculate_average</code>). <code>track_operation(label)</code> – параметризований декоратор: зовнішня функція приймає параметр, повертає декоратор, а wrapper після кожного виклику записує операцію в deque та Counter. <code>functools.wraps</code> зберігає ім'я та docstring обгорнутої функції.</p>
+<pre class="code">def measure_time(func: Callable[P, R]) -&gt; Callable[P, R]:
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -&gt; R:
+        start = perf_counter()
+        result = func(*args, **kwargs)
+        elapsed = perf_counter() - start
+        print(f"[час] {func.__name__}: {elapsed:.6f} с")
+        return result
+
+    return wrapper
+
+def track_operation(
+    label: str,
+    *,
+    history: deque[str] | None = None,
+    counts: Counter[str] | None = None,
+) -&gt; Callable[[Callable[P, R]], Callable[P, R]]:
+    target_history = operation_history if history is None else history
+    target_counts = operation_counts if counts is None else counts
+
+    def decorator(func: Callable[P, R]) -&gt; Callable[P, R]:
+        @wraps(func)
+        def wrapper(*args: P.args, **kwargs: P.kwargs) -&gt; R:
+            result = func(*args, **kwargs)
+            target_history.append(label)
+            target_counts[label] += 1
+            return result
+
+        return wrapper
+
+    return decorator</pre>
+<h1>7. Результат роботи програми</h1>
+<p>Вивід команди <code>python -m data_processor.main</code>:</p>
+<pre class="out">ЛР2, варіант 1: аналіз успішності студентів
+
+Усі студенти (10)
+------------------------------------------------------------
+  1 Анна Коваль              PI-21     91.50
+  2 Олег Мельник             PI-21     84.00
+  3 Ірина Бондар             PI-22     95.20
+  4 Андрій Шевченко          PI-21     88.70
+  5 Марія Бойко              PI-22     79.30
+  6 Тарас Гриценко           PI-23     72.40
+  7 Софія Гнатюк             PI-22     66.80
+  8 Дмитро Ткаченко          PI-23     58.90
+  9 Катерина Лисенко         PI-23     93.10
+ 10 Максим Мельник           PI-21     70.60
+
+Унікальні групи (set): ['PI-21', 'PI-22', 'PI-23']
+Чи є група PI-24: False
+Унікальних прізвищ: 9 на 10 студентів
+
+Пошук за ID (dict-індекс):
+  3: Ірина Бондар, PI-22, 95.2
+  99: не знайдено
+  Лінійний пошук у list дає той самий об'єкт: True
+Пошук за прізвищем 'Мельник': ['Олег Мельник', 'Максим Мельник']
+Пошук за прізвищем 'бойко': ['Марія Бойко']
+
+Групування за групою (defaultdict):
+  PI-21: Коваль, Мельник, Шевченко, Мельник
+  PI-22: Бондар, Бойко, Гнатюк
+  PI-23: Гриценко, Ткаченко, Лисенко
+Кількість студентів (Counter.most_common): PI-21=4, PI-22=3, PI-23=3
+Вкладене групування група -&gt; рівень успішності:
+  PI-21: відмінно=1, добре=2, задовільно=1
+  PI-22: відмінно=1, добре=1, задовільно=1
+  PI-23: задовільно=1, незадовільно=1, відмінно=1
+[час] calculate_average: 0.000005 с
+
+Середній бал усіх студентів: 80.05
+Найкращий студент: Ірина Бондар (95.20)
+
+Статистика за групами (dict comprehension + NamedTuple):
+  група    к-сть  середній    мін.   макс.
+  PI-21        4     83.70    70.6    91.5
+  PI-22        3     80.43    66.8    95.2
+  PI-23        3     74.80    58.9    93.1
+
+Фільтр average_grade &gt;= 85 (closure): [1, 3, 4, 9]
+Фільтр average_grade &lt; 70 (lambda): [7, 8]
+Студенти групи PI-22: [3, 5, 7]
+
+Рейтинг за середнім балом (спадання)
+------------------------------------------------------------
+  3 Ірина Бондар             PI-22     95.20
+  9 Катерина Лисенко         PI-23     93.10
+  1 Анна Коваль              PI-21     91.50
+  4 Андрій Шевченко          PI-21     88.70
+  2 Олег Мельник             PI-21     84.00
+  5 Марія Бойко              PI-22     79.30
+  6 Тарас Гриценко           PI-23     72.40
+ 10 Максим Мельник           PI-21     70.60
+  7 Софія Гнатюк             PI-22     66.80
+  8 Дмитро Ткаченко          PI-23     58.90
+
+Сортування за (group, average_grade) у зворотному порядку: [9, 6, 8, 3, 5, 7, 1, 4, 2, 10]
+Pipeline: групи PI-21 і PI-22 -&gt; сортування -&gt; топ-3: [3, 1, 4]
+
+*args: calculate_stats(75, 80, 92, 96) -&gt;
+  GradeStats(size=4, average=85.75, minimum=75, maximum=96)
+**kwargs: create_student(id=11, first_name=..., ..., average_grade=89.0) -&gt;
+  {'id': 11, 'first_name': 'Тарас', 'last_name': 'Новак', 'group': 'PI-23', 'average_grade': 89.0}
+**kwargs з балом 120 -&gt; ValueError: Середній бал має бути в межах 0-100
+
+Підсумок (build_summary(**options)):
+  statistics: {'size': 10, 'average': 80.05, 'minimum': 58.9, 'maximum': 95.2}
+  best_student: Ірина Бондар
+  students_by_group: {'PI-21': 4, 'PI-22': 3, 'PI-23': 3}
+  top_students: [3, 9, 1]
+  min_grade: 85
+  students_above_min: 4
+Експортовано у results\summary.json
+
+Останні операції (deque, maxlen=5):
+  ['фільтр за мін. балом', 'сортування за балом', 'сортування за балом', 'сортування за балом', 'фільтр за мін. балом']
+Усього викликів (Counter): {'пошук за ID': 2, 'групування за групою': 2, 'фільтр за мін. балом': 2, 'сортування за балом': 3}</pre>
+<p>Ручна перевірка: сума балів за групами 334.8 + 241.3 + 224.4 = 800.5, середній бал 800.5 / 10 = 80.05, що збігається з виводом програми; найвищий бал у списку – 95.2 (Ірина Бондар).</p>
+<h1>8. Аналіз складності операцій</h1>
+<p class="tcap">Таблиця 6 – Часова складність операцій програми (n – кількість студентів)</p>
+<table class=""><thead><tr><th>Операція</th><th>Реалізація</th><th>Складність</th></tr></thead><tbody><tr><td>побудова dict-індексу</td><td><code>create_student_index</code></td><td>O(n)</td></tr><tr><td>пошук за ID у list</td><td><code>find_student_linear</code></td><td>O(n), у середньому n/2 порівнянь</td></tr><tr><td>пошук за ID в індексі</td><td><code>find_student</code> (dict.get)</td><td>O(1) у середньому</td></tr><tr><td>перевірка <code>x in set</code></td><td><code>'PI-24' in groups</code></td><td>O(1) у середньому</td></tr><tr><td>фільтрація</td><td><code>filter_by_min_grade</code></td><td>O(n)</td></tr><tr><td>групування / підрахунок</td><td><code>group_students</code>, <code>count_students_by_group</code></td><td>O(n)</td></tr><tr><td>вкладене групування</td><td><code>group_nested</code> (k рівнів)</td><td>O(n·k)</td></tr><tr><td>середнє, максимум</td><td><code>calculate_average</code>, <code>find_best_student</code></td><td>O(n), пам'ять O(1)</td></tr><tr><td>сортування</td><td><code>sort_by_grade</code>, <code>sort_items</code></td><td>O(n log n) (Timsort)</td></tr><tr><td>топ-k студентів</td><td><code>sort_by_grade(...)[:k]</code></td><td>O(n log n); heapq.nlargest – O(n log k)</td></tr><tr><td>запис у журнал</td><td><code>deque.append</code> з maxlen</td><td>O(1)</td></tr></tbody></table>
+<p>Якщо пошуків за ID багато, вигідно один раз побудувати індекс за O(n) і далі шукати за O(1) замість O(n) на кожен пошук (перевірено в розділі 9).</p>
+<h1>9. Експериментальна частина (benchmark)</h1>
+<p>Для 1 000, 10 000 і 100 000 згенерованих студентів виміряно середній час пошуку 200 випадкових ID (<code>timeit</code>, найкращий із 5 повторів): A – лінійний пошук у list, B – <code>index.get</code> у dict-індексі, а також <code>x in list</code>, <code>x in set</code> і час побудови індексу (<code>python -m data_processor.benchmark</code>).</p>
+<p class="tcap">Таблиця 7 – Результати benchmark (Python 3.12, Windows 11)</p>
+<table class="num"><thead><tr><th>Кількість records</th><th>list search, мкс</th><th>dict search, мкс</th><th>dict швидше, разів</th><th>x in list, мкс</th><th>x in set, мкс</th><th>побудова індексу, мс</th></tr></thead><tbody><tr><td>1 000</td><td>8.14</td><td>0.019</td><td>436</td><td>1.57</td><td>0.023</td><td>0.024</td></tr><tr><td>10 000</td><td>84.41</td><td>0.018</td><td>4 687</td><td>16.33</td><td>0.022</td><td>0.436</td></tr><tr><td>100 000</td><td>830.94</td><td>0.019</td><td>43 638</td><td>173.19</td><td>0.020</td><td>5.188</td></tr></tbody></table>
+<div class="figure"><svg xmlns:xlink="http://www.w3.org/1999/xlink" width="468pt" height="176.4pt" viewBox="0 0 468 176.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-11-09T12:22:22.132416</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.11.2, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 176.4 
+L 468 176.4 
+L 468 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 42.852246 147.493711 
+L 464.4 147.493711 
+L 464.4 19.107812 
+L 42.852246 19.107812 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <path d="M 72.966459 147.493711 
+L 72.966459 19.107812 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_2"/>
+     <g id="text_1">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: middle; fill: #52514e" x="72.966459" y="157.545957" transform="rotate(-0 72.966459 157.545957)">1 000</text>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_3">
+      <path d="M 220.498381 147.493711 
+L 220.498381 19.107812 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_4"/>
+     <g id="text_2">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: middle; fill: #52514e" x="220.498381" y="157.545957" transform="rotate(-0 220.498381 157.545957)">10 000</text>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_5">
+      <path d="M 368.030303 147.493711 
+L 368.030303 19.107812 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_6"/>
+     <g id="text_3">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: middle; fill: #52514e" x="368.030303" y="157.545957" transform="rotate(-0 368.030303 157.545957)">100 000</text>
+     </g>
+    </g>
+    <g id="text_4">
+     <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: middle; fill: #52514e" x="253.626123" y="170.018438" transform="rotate(-0 253.626123 170.018438)">кількість записів (логарифмічна шкала)</text>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_7">
+      <path d="M 42.852246 141.052377 
+L 464.4 141.052377 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_8"/>
+     <g id="text_5">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="144.3285" transform="rotate(-0 39.352246 144.3285)">0.01</text>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_9">
+      <path d="M 42.852246 119.654727 
+L 464.4 119.654727 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_10"/>
+     <g id="text_6">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="122.93085" transform="rotate(-0 39.352246 122.93085)">0.1</text>
+     </g>
+    </g>
+    <g id="ytick_3">
+     <g id="line2d_11">
+      <path d="M 42.852246 98.257077 
+L 464.4 98.257077 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_12"/>
+     <g id="text_7">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="101.5332" transform="rotate(-0 39.352246 101.5332)">1</text>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_13">
+      <path d="M 42.852246 76.859427 
+L 464.4 76.859427 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_14"/>
+     <g id="text_8">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="80.13555" transform="rotate(-0 39.352246 80.13555)">10</text>
+     </g>
+    </g>
+    <g id="ytick_5">
+     <g id="line2d_15">
+      <path d="M 42.852246 55.461778 
+L 464.4 55.461778 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_16"/>
+     <g id="text_9">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="58.737901" transform="rotate(-0 39.352246 58.737901)">100</text>
+     </g>
+    </g>
+    <g id="ytick_6">
+     <g id="line2d_17">
+      <path d="M 42.852246 34.064128 
+L 464.4 34.064128 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #e1e0d9; stroke-width: 0.8; stroke-linecap: square"/>
+     </g>
+     <g id="line2d_18"/>
+     <g id="text_10">
+      <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: end; fill: #52514e" x="39.352246" y="37.340251" transform="rotate(-0 39.352246 37.340251)">1 000</text>
+     </g>
+    </g>
+    <g id="text_11">
+     <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: middle; fill: #52514e" x="11.363027" y="83.300762" transform="rotate(-90 11.363027 83.300762)">час одного пошуку, мкс</text>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 42.852246 147.493711 
+L 42.852246 19.107813 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 42.852246 147.493711 
+L 464.4 147.493711 
+" style="fill: none; stroke: #c3c2b7; stroke-width: 0.8; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="line2d_19">
+    <path d="M 72.966459 78.767284 
+L 220.498381 57.036288 
+L 368.030303 35.785145 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #2a78d6; stroke-width: 1.6; stroke-linecap: round"/>
+    <defs>
+     <path id="me483e7123e" d="M 0 3.5 
+C 0.928211 3.5 1.81853 3.131218 2.474874 2.474874 
+C 3.131218 1.81853 3.5 0.928211 3.5 0 
+C 3.5 -0.928211 3.131218 -1.81853 2.474874 -2.474874 
+C 1.81853 -3.131218 0.928211 -3.5 0 -3.5 
+C -0.928211 -3.5 -1.81853 -3.131218 -2.474874 -2.474874 
+C -3.131218 -1.81853 -3.5 -0.928211 -3.5 0 
+C -3.5 0.928211 -3.131218 1.81853 -2.474874 2.474874 
+C -1.81853 3.131218 -0.928211 3.5 0 3.5 
+z
+" style="stroke: #ffffff; stroke-width: 1.5"/>
+    </defs>
+    <g clip-path="url(#pf8cf5876a8)">
+     <use xlink:href="#me483e7123e" x="72.966459" y="78.767284" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.5"/>
+     <use xlink:href="#me483e7123e" x="220.498381" y="57.036288" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.5"/>
+     <use xlink:href="#me483e7123e" x="368.030303" y="35.785145" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.5"/>
+    </g>
+   </g>
+   <g id="line2d_20">
+    <path d="M 72.966459 94.053874 
+L 220.498381 72.304249 
+L 368.030303 50.357751 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #eb6834; stroke-width: 1.6; stroke-linecap: round"/>
+    <defs>
+     <path id="mb0f7ff81fb" d="M -3.5 3.5 
+L 3.5 3.5 
+L 3.5 -3.5 
+L -3.5 -3.5 
+z
+" style="stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#pf8cf5876a8)">
+     <use xlink:href="#mb0f7ff81fb" x="72.966459" y="94.053874" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#mb0f7ff81fb" x="220.498381" y="72.304249" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#mb0f7ff81fb" x="368.030303" y="50.357751" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="line2d_21">
+    <path d="M 72.966459 135.25417 
+L 220.498381 135.58437 
+L 368.030303 135.067297 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #1baf7a; stroke-width: 1.6; stroke-linecap: round"/>
+    <defs>
+     <path id="m3752b3f0dc" d="M 0 -3.5 
+L -3.5 3.5 
+L 3.5 3.5 
+z
+" style="stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#pf8cf5876a8)">
+     <use xlink:href="#m3752b3f0dc" x="72.966459" y="135.25417" style="fill: #1baf7a; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#m3752b3f0dc" x="220.498381" y="135.58437" style="fill: #1baf7a; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#m3752b3f0dc" x="368.030303" y="135.067297" style="fill: #1baf7a; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="line2d_22">
+    <path d="M 72.966459 133.494939 
+L 220.498381 133.893972 
+L 368.030303 134.470272 
+" clip-path="url(#pf8cf5876a8)" style="fill: none; stroke: #eda100; stroke-width: 1.6; stroke-linecap: round"/>
+    <defs>
+     <path id="m68c65df782" d="M 0 4.949747 
+L 4.949747 0 
+L 0 -4.949747 
+L -4.949747 0 
+z
+" style="stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </defs>
+    <g clip-path="url(#pf8cf5876a8)">
+     <use xlink:href="#m68c65df782" x="72.966459" y="133.494939" style="fill: #eda100; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#m68c65df782" x="220.498381" y="133.893972" style="fill: #eda100; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     <use xlink:href="#m68c65df782" x="368.030303" y="134.470272" style="fill: #eda100; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+    </g>
+   </g>
+   <g id="text_12">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="377.030303" y="38.114247" transform="rotate(-0 377.030303 38.114247)">831 мкс</text>
+   </g>
+   <g id="text_13">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="377.030303" y="52.686853" transform="rotate(-0 377.030303 52.686853)">173 мкс</text>
+   </g>
+   <g id="text_14">
+    <text style="font-size: 9px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="377.030303" y="137.396399" transform="rotate(-0 377.030303 137.396399)">≈0.02 мкс</text>
+   </g>
+   <g id="legend_1">
+    <g id="line2d_23">
+     <path d="M 47.652246 9.625312 
+L 54.052246 9.625312 
+L 60.452246 9.625312 
+" style="fill: none; stroke: #2a78d6; stroke-width: 1.6; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#me483e7123e" x="54.052246" y="9.625312" style="fill: #2a78d6; stroke: #ffffff; stroke-width: 1.5"/>
+     </g>
+    </g>
+    <g id="text_15">
+     <text style="font-size: 8px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="66.852246" y="12.425312" transform="rotate(-0 66.852246 12.425312)">пошук у list (find_student_linear)</text>
+    </g>
+    <g id="line2d_24">
+     <path d="M 191.782246 9.625312 
+L 198.182246 9.625312 
+L 204.582246 9.625312 
+" style="fill: none; stroke: #eb6834; stroke-width: 1.6; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#mb0f7ff81fb" x="198.182246" y="9.625312" style="fill: #eb6834; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     </g>
+    </g>
+    <g id="text_16">
+     <text style="font-size: 8px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="210.982246" y="12.425312" transform="rotate(-0 210.982246 12.425312)">x in list</text>
+    </g>
+    <g id="line2d_25">
+     <path d="M 245.083496 9.625312 
+L 251.483496 9.625312 
+L 257.883496 9.625312 
+" style="fill: none; stroke: #1baf7a; stroke-width: 1.6; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#m3752b3f0dc" x="251.483496" y="9.625312" style="fill: #1baf7a; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     </g>
+    </g>
+    <g id="text_17">
+     <text style="font-size: 8px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="264.283496" y="12.425312" transform="rotate(-0 264.283496 12.425312)">index.get(x) (dict)</text>
+    </g>
+    <g id="line2d_26">
+     <path d="M 334.830996 9.625312 
+L 341.230996 9.625312 
+L 347.630996 9.625312 
+" style="fill: none; stroke: #eda100; stroke-width: 1.6; stroke-linecap: round"/>
+     <g>
+      <use xlink:href="#m68c65df782" x="341.230996" y="9.625312" style="fill: #eda100; stroke: #ffffff; stroke-width: 1.5; stroke-linejoin: miter"/>
+     </g>
+    </g>
+    <g id="text_18">
+     <text style="font-size: 8px; font-family: 'Segoe UI', 'Arial', sans-serif; text-anchor: start; fill: #0b0b0b" x="354.030996" y="12.425312" transform="rotate(-0 354.030996 12.425312)">x in set</text>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pf8cf5876a8">
+   <rect x="42.852246" y="19.107812" width="421.547754" height="128.385898"/>
+  </clipPath>
+ </defs>
+</svg>
+<p class="fcap">Рисунок 1 – Час одного пошуку залежно від кількості записів (обидві осі логарифмічні)</p></div>
+<p>При збільшенні кількості записів у 10 разів час пошуку в list зростає в 10.4 та 9.8 раза – лінійна залежність O(n), на графіку це пряма з нахилом 1. Час пошуку в dict майже не змінюється (≈0.02 мкс, розкид 1.1×) – це O(1). На 100 000 записів індекс швидший у 43 638 разів. <code>x in list</code> приблизно в 4.8 раза швидший за <code>find_student_linear</code>, бо цикл виконується в C, але залишається O(n); <code>x in set</code> працює так само швидко, як dict (на графіку їхні лінії збігаються).</p>
+<p>Побудова індексу коштує O(n) (5.2 мс на 100 000 записів) і окупається вже після 3–6 пошуків. Отже, теоретична складність добре узгоджується з практичним часом: для багаторазового пошуку за ключем потрібно використовувати dict або set.</p>
+<h1>10. Перевірка правильності</h1>
+<p>Тести (<code>tests/</code>, unittest) перевіряють пошук обома способами, межі фільтрів, closure, групування, сортування, pipeline, валідацію, агрегації, експорт JSON, декоратори і benchmark. Пакет встановлено в чисте venv через <code>pip install -e .</code>, console commands працюють.</p>
+<p class="tcap">Таблиця 8 – Результати перевірок</p>
+<table class=""><thead><tr><th>Перевірка</th><th>Результат</th></tr></thead><tbody><tr><td><code>python -m unittest discover -s tests</code></td><td>Ran 33 tests in 8.812s — OK</td></tr><tr><td><code>ruff check src tests</code></td><td>All checks passed!</td></tr><tr><td><code>ruff format --check src tests</code></td><td>9 files already formatted</td></tr><tr><td><code>mypy src tests</code></td><td>Success: no issues found in 9 source files</td></tr></tbody></table>
+<p>Усі обов'язкові вимоги розділу 25 методички виконано (розділи 1–9 звіту). Із завдань підвищеної складності реалізовано всі десять: універсальні фільтрація і сортування, параметризований декоратор, closures для фільтрів, вкладене групування, Counter, deque-журнал, benchmark list vs set/dict, експорт у JSON і pipeline.</p>
+<h1>Висновки</h1>
+<p>Створено модуль аналізу успішності студентів (варіант 1), що продовжує ЛР1: пошук, фільтрація, групування, сортування, агрегація і статистика. Структури обрано за властивостями: list – впорядкований набір, tuple – незмінні константи і складені ключі, set – унікальність і швидка перевірка належності, dict – записи та індекс, collections – групування, підрахунок і журнал операцій. Функції вищого порядку, closures і decorators дозволили змінювати поведінку без зміни основного коду. Експеримент підтвердив теорію: час пошуку в list зростає лінійно, у dict – сталий, і на 100 000 записів різниця перевищує 43 000 разів.</p></body></html>
