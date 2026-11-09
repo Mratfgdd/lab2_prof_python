@@ -1,0 +1,21 @@
+{
+  "statistics": {
+    "size": 10,
+    "average": 80.05,
+    "minimum": 58.9,
+    "maximum": 95.2
+  },
+  "best_student": "Ірина Бондар",
+  "students_by_group": {
+    "PI-21": 4,
+    "PI-22": 3,
+    "PI-23": 3
+  },
+  "top_students": [
+    3,
+    9,
+    1
+  ],
+  "min_grade": 85,
+  "students_above_min": 4
+}
